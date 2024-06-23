@@ -42,7 +42,7 @@ st.image(image, use_column_width=True)
 
 # Page title
 st.markdown("""
-# Bioactivity Prediction App (Acetylcholinesterase)
+# Bioactivity Prediction App (IDO1)
 
 This app allows you to predict the bioactivity towards inhibting the `IDO1` enzyme. `Indoleamine 2, 3-dioxygenase 1 (IDO1)` is a drug target for Cancer Immunotherapy. It is also a potential target for autoimmune diseases.
 
