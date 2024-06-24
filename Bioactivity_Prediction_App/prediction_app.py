@@ -6,20 +6,38 @@ import os
 import base64
 import pickle
 import gdown
+import requests
 
-# Download model from Google Drive
+# Function to download the model from Google Drive
+def download_model(url, output):
+    gdown.download(url, output, quiet=False)
+
+# Download and load the model
 model_url = 'https://drive.google.com/uc?id=1ZmWYj5SITeL1MJJyJ4tOJYdYMZ4uK_8V'
 output_model = 'model.pkl'
-gdown.download(model_url, output_model, quiet=False)
+
+# Download the model if it does not exist
+if not os.path.exists(output_model):
+    download_model(model_url, output_model)
 
 # Load the model
-with open(output_model, 'rb') as file:
-    model = pickle.load(file)
+try:
+    with open(output_model, 'rb') as file:
+        model = pickle.load(file)
+except Exception as e:
+    st.error(f"Error loading the model: {e}")
 
-# Logo image
+# Function to display the logo image
+def display_logo(url):
+    try:
+        image = Image.open(requests.get(url, stream=True).raw)
+        st.image(image, use_column_width=True)
+    except Exception as e:
+        st.error(f"Error loading the logo image: {e}")
+
+# Display the logo
 logo_url = 'https://github.com/dikshasr25/Bioinformatics/blob/9442d62380f0d6b30fd6122587bf176c324f9ba6/Bioactivity_Prediction_App/logo.png?raw=true'
-image = Image.open(requests.get(logo_url, stream=True).raw)
-st.image(image, use_column_width=True)
+display_logo(logo_url)
 
 # Page title
 st.markdown("""
@@ -40,6 +58,7 @@ with st.sidebar.header('1. Upload your CSV data'):
 [Example input file](https://github.com/dikshasr25/Bioinformatics/blob/d9b92feae5963773f33236ea0c233481f23169d5/Bioactivity_Prediction_App/IDO1.txt)
 """)
 
+# Molecular descriptor calculator
 def desc_calc():
     # Perform the descriptor calculation
     bashCommand = "java -Xms2G -Xmx2G -Djava.awt.headless=true -jar ./PaDEL-Descriptor/PaDEL-Descriptor.jar -removesalt -standardizenitro -fingerprints -descriptortypes ./PaDEL-Descriptor/PubchemFingerprinter.xml -dir ./ -file descriptors_output.csv"
@@ -47,21 +66,26 @@ def desc_calc():
     output, error = process.communicate()
     os.remove('molecule.smi')
 
+# File download
 def filedownload(df):
     csv = df.to_csv(index=False)
     b64 = base64.b64encode(csv.encode()).decode()  # strings <-> bytes conversions
     href = f'<a href="data:file/csv;base64,{b64}" download="prediction.csv">Download Predictions</a>'
     return href
 
+# Model building
 def build_model(input_data):
-    # Apply model to make predictions
-    prediction = model.predict(input_data)
-    st.header('**Prediction output**')
-    prediction_output = pd.Series(prediction, name='pIC50')
-    molecule_name = pd.Series(load_data[1], name='molecule_name')
-    df = pd.concat([molecule_name, prediction_output], axis=1)
-    st.write(df)
-    st.markdown(filedownload(df), unsafe_allow_html=True)
+    try:
+        # Apply model to make predictions
+        prediction = model.predict(input_data)
+        st.header('**Prediction output**')
+        prediction_output = pd.Series(prediction, name='pIC50')
+        molecule_name = pd.Series(load_data[1], name='molecule_name')
+        df = pd.concat([molecule_name, prediction_output], axis=1)
+        st.write(df)
+        st.markdown(filedownload(df), unsafe_allow_html=True)
+    except Exception as e:
+        st.error(f"Error in model prediction: {e}")
 
 if st.sidebar.button('Predict'):
     if uploaded_file is not None:
