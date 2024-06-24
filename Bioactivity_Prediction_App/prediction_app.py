@@ -35,7 +35,7 @@ def build_model(input_data):
     st.markdown(filedownload(df), unsafe_allow_html=True)
 
 # Logo image
-image = Image.open('/content/logo.png')
+image = Image.open('https://github.com/dikshasr25/Bioinformatics/blob/9442d62380f0d6b30fd6122587bf176c324f9ba6/Bioactivity_Prediction_App/logo.png')
 
 st.image(image, use_column_width=True)
 
