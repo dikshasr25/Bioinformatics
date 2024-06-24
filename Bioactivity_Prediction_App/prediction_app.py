@@ -7,14 +7,40 @@ import base64
 import pickle
 import requests
 
-# Molecular descriptor calculator
+
+def download_file(url, output_path):
+    """
+    Function to download file from URL and save it to output_path.
+    """
+    with requests.get(url, stream=True) as r:
+        r.raise_for_status()
+        with open(output_path, 'wb') as f:
+            for chunk in r.iter_content(chunk_size=8192):
+                f.write(chunk)
+
 def desc_calc():
-    # Performs the descriptor calculation
-    bashCommand = "java -Xms2G -Xmx2G -Djava.awt.headless=true -jar ./PaDEL-Descriptor/PaDEL-Descriptor.jar -removesalt -standardizenitro -fingerprints -descriptortypes ./PaDEL-Descriptor/PubchemFingerprinter.xml -dir ./ -file descriptors_output.csv"
-    process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
-    output, error = process.communicate()
-    os.remove('molecule.smi')
-    
+    bashCommand = "java -Xms2G -Xmx2G -Djava.awt.headless=true -jar ./PaDEL-Descriptor/PaDEL-Descriptor.jar -removesalt -standardizenitro -fingerprints -descriptortypes ./PaDEL-Descriptor/PubchemFingerprinter.xml -dir ./ -file descriptors_list.csv"
+
+    try:
+        # Execute the subprocess command
+        process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout, stderr = process.communicate()
+
+        # Check if subprocess executed successfully
+        if process.returncode == 0:
+            output_file = "./descriptors_list.csv"  # Assuming the file is saved in the current directory
+            if os.path.exists(output_file):
+                st.success("Descriptors calculation completed successfully!")
+                
+                # Provide download link
+                st.markdown(f"### [Download descriptors_output.csv](./descriptors_list.csv)")
+            else:
+                st.error("Output file descriptors_output.csv not found.")
+        else:
+            st.error(f"Error occurred while running the command: {stderr.decode('utf-8')}")
+
+    except Exception as e:
+        st.error(f"An error occurred: {e}")
    
 # File download
 def filedownload(df):
