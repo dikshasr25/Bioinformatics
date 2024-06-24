@@ -10,7 +10,7 @@ import requests
 # Molecular descriptor calculator
 def desc_calc():
     bashCommand = "java -Xms2G -Xmx2G -Djava.awt.headless=true -jar ./PaDEL-Descriptor/PaDEL-Descriptor.jar -removesalt -standardizenitro -fingerprints -descriptortypes ./PaDEL-Descriptor/PubchemFingerprinter.xml -dir ./ -file descriptors_output.csv"
-    print("Running command:", bashCommand)
+    print("Running command:", bashCommand)  # Print the command for debugging
     
     try:
         process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
@@ -25,7 +25,6 @@ def desc_calc():
     except subprocess.CalledProcessError as e:
         print(f"Error executing command {bashCommand}: {e}")
         # Handle the error appropriately, e.g., log, raise exception, etc.
-
 
 # File download
 def filedownload(df):
