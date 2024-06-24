@@ -7,7 +7,7 @@ import base64
 import pickle
 import gdown
 import requests
-import sklearn
+import scikit-learn
 # Function to download the model from Google Drive
 def download_model(url, output):
     gdown.download(url, output, quiet=False)
