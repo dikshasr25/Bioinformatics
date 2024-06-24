@@ -19,7 +19,7 @@ def download_file(url, output_path):
                 f.write(chunk)
 
 def desc_calc():
-    bashCommand = "java -Xms2G -Xmx2G -Djava.awt.headless=true -jar ./PaDEL-Descriptor/PaDEL-Descriptor.jar -removesalt -standardizenitro -fingerprints -descriptortypes ./PaDEL-Descriptor/PubchemFingerprinter.xml -dir ./ -file descriptors_list.csv"
+    bashCommand = "-java -Xms2G -Xmx2G -Djava.awt.headless=true -jar ./PaDEL-Descriptor/PaDEL-Descriptor.jar -removesalt -standardizenitro -fingerprints -descriptortypes ./PaDEL-Descriptor/PubchemFingerprinter.xml -dir ./ -file descriptors_list.csv"
 
     try:
         # Execute the subprocess command
@@ -102,7 +102,7 @@ if st.sidebar.button('Predict'):
 
     # Read in calculated descriptors and display the dataframe
     st.header('**Calculated molecular descriptors**')
-    desc = pd.read_csv('https://github.com/dikshasr25/Bioinformatics/blob/ec86820535d24900043ad0b8beb75273f9bee8f9/Bioactivity_Prediction_App/descriptor_list.csv')
+    desc = pd.read_csv('https://raw.githubusercontent.com/dikshasr25/Bioinformatics/ec86820535d24900043ad0b8beb75273f9bee8f9/Bioactivity_Prediction_App/descriptor_list.csv')
     st.write(desc)
     st.write(desc.shape)
 
