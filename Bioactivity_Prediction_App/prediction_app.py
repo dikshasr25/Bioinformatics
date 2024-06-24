@@ -9,23 +9,13 @@ import requests
 
 # Molecular descriptor calculator
 def desc_calc():
+    # Performs the descriptor calculation
     bashCommand = "java -Xms2G -Xmx2G -Djava.awt.headless=true -jar ./PaDEL-Descriptor/PaDEL-Descriptor.jar -removesalt -standardizenitro -fingerprints -descriptortypes ./PaDEL-Descriptor/PubchemFingerprinter.xml -dir ./ -file descriptors_output.csv"
-    print("Running command:", bashCommand)  # Print the command for debugging
+    process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
+    output, error = process.communicate()
+    os.remove('molecule.smi')
     
-    try:
-        process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
-        output, error = process.communicate()
-        
-        # Check for errors
-        if process.returncode != 0:
-            raise subprocess.CalledProcessError(process.returncode, bashCommand)
-        
-        os.remove('molecule.smi')
-        
-    except subprocess.CalledProcessError as e:
-        print(f"Error executing command {bashCommand}: {e}")
-        # Handle the error appropriately, e.g., log, raise exception, etc.
-
+   
 # File download
 def filedownload(df):
     csv = df.to_csv(index=False)
