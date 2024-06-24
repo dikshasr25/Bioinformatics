@@ -56,7 +56,7 @@ This app allows you to predict the bioactivity towards inhibting the `IDO1` enzy
 with st.sidebar.header('1. Upload your CSV data'):
     uploaded_file = st.sidebar.file_uploader("Upload your input file", type=['txt'])
     st.sidebar.markdown("""
-[Example input file](https://github.com/dikshasr25/dikshasr25/blob/17e224ee592ce198742f2bc21e3fc4c11fc87ca2/IDO1.txt)
+[Example input file](https://github.com/dikshasr25/Bioinformatics/blob/d9b92feae5963773f33236ea0c233481f23169d5/Bioactivity_Prediction_App/IDO1.txt)
 """)
 
 if st.sidebar.button('Predict'):
