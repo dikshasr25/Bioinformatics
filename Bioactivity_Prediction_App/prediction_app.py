@@ -24,7 +24,7 @@ def filedownload(df):
 # Model building
 def build_model(input_data):
     # Reads in saved regression model
-    load_model = pickle.load(open('https://drive.google.com/file/d/1ZmWYj5SITeL1MJJyJ4tOJYdYMZ4uK_8V/view?usp=sharing', 'rb'))
+    load_model = pickle.load(open('https://drive.google.com/file/d/1ZmWYj5SITeL1MJJyJ4tOJYdYMZ4uK_8V/view?usp=drive_link', 'rb'))
     # Apply model to make predictions
     prediction = load_model.predict(input_data)
     st.header('**Prediction output**')
@@ -70,7 +70,7 @@ if st.sidebar.button('Predict'):
 
     # Read in calculated descriptors and display the dataframe
     st.header('**Calculated molecular descriptors**')
-    desc = pd.read_csv('descriptors_output.csv')
+    desc = pd.read_csv('https://github.com/dikshasr25/Bioinformatics/blob/ec86820535d24900043ad0b8beb75273f9bee8f9/Bioactivity_Prediction_App/descriptor_list.csv')
     st.write(desc)
     st.write(desc.shape)
 
