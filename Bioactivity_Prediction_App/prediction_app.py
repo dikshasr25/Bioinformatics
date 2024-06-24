@@ -24,7 +24,7 @@ def filedownload(df):
 # Model building
 def build_model(input_data):
     # Reads in saved regression model
-    load_model = pickle.load(open('https://drive.google.com/file/d/1ZmWYj5SITeL1MJJyJ4tOJYdYMZ4uK_8V/view?usp=drive_link', 'rb'))
+    load_model = 'https://drive.google.com/file/d/1ZmWYj5SITeL1MJJyJ4tOJYdYMZ4uK_8V/view?usp=drive_link'
     # Apply model to make predictions
     prediction = load_model.predict(input_data)
     st.header('**Prediction output**')
@@ -33,11 +33,15 @@ def build_model(input_data):
     df = pd.concat([molecule_name, prediction_output], axis=1)
     st.write(df)
     st.markdown(filedownload(df), unsafe_allow_html=True)
-
+def display_logo(url):
+    try:
+        image = Image.open(requests.get(url, stream=True).raw)
+        st.image(image, use_column_width=True)
+    except Exception as e:
+        st.error(f"Error loading the logo image: {e}")
 # Logo image
-image = Image.open('https://github.com/dikshasr25/Bioinformatics/blob/9442d62380f0d6b30fd6122587bf176c324f9ba6/Bioactivity_Prediction_App/logo.png')
-
-st.image(image, use_column_width=True)
+logo_url = 'https://github.com/dikshasr25/Bioinformatics/blob/9442d62380f0d6b30fd6122587bf176c324f9ba6/Bioactivity_Prediction_App/logo.png?raw=true'
+display_logo(logo_url)
 
 # Page title
 st.markdown("""
